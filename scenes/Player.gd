@@ -100,9 +100,10 @@ func play_shoot_effects():
 func receive_damage():
 	health -= 1
 	if health <= 0:
-		health = 3
-		position = Vector3.ZERO
-	health_changed.emit(health)
+		get_tree().change_scene_to_file("res://scenes/lose.tscn")
+		#health = 3
+		#position = Vector3.ZERO
+	#health_changed.emit(health)
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
