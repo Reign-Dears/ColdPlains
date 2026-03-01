@@ -45,7 +45,7 @@ func _unhandled_input(event):
 		play_shoot_effects.rpc()
 		if raycast.is_colliding():
 			var hit_player = raycast.get_collider()
-			hit_player.receive_damage().rpc_id(hit_player.get_multiplayer_authority())
+			hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
 		if enemy_raycast.is_colliding():
 			enemy_raycast.get_collider().damage_taken += 1 #replace with signals later
 
