@@ -10,7 +10,8 @@ signal health_changed(health_value)
 @export var enemy_raycast : RayCast3D
 
 
-var health = 3
+var health = 100
+var damage = 10
 
 const SPEED = 10.0
 const JUMP_VELOCITY = 10.0
@@ -106,8 +107,8 @@ func play_shoot_effects():
 	muzzle_flash.emitting = true
 
 @rpc("any_peer")
-func receive_damage():
-	health -= 1
+func receive_damage(amount):
+	health -= amount
 	health_changed.emit(health)
 	if health <= 0:
 		get_tree().change_scene_to_file("res://scenes/lose.tscn")
