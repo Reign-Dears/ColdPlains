@@ -171,10 +171,6 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_uu53b")
 draw_pass_1 = SubResource("PlaneMesh_b2g4i")
 
-[node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=1804038237]
-target_position = Vector3(0, 0, -50)
-collision_mask = 2
-
 [node name="Hand" type="Node3D" parent="Camera3D" unique_id=1826501949]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.51306, 0)
 
@@ -183,6 +179,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1907651, 0)
 shadow_enabled = true
 spot_range = 9.259
 spot_angle = 16.67
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=1804038237]
+target_position = Vector3(0, 0, -50)
+collision_mask = 2
 
 [node name="EnemyRayCast3D" type="RayCast3D" parent="Camera3D" unique_id=890706288]
 target_position = Vector3(0, 0, -50)
