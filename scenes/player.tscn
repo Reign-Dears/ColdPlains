@@ -138,6 +138,10 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_2v3wm")
 enemy_raycast = NodePath("Camera3D/EnemyRayCast3D")
+walk_speed = null
+slide_speed = null
+slide_duration = null
+slide_friction = null
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1832600017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

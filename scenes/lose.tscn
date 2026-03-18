@@ -1,11 +1,28 @@
 [gd_scene format=3 uid="uid://t2uyuire0yg1"]
 
-[node name="Lose" type="Node2D" unique_id=58169483]
+[ext_resource type="Script" uid="uid://bo48iw6x2at6s" path="res://scenes/lose.gd" id="1_vjdtf"]
 
-[node name="Label" type="Label" parent="." unique_id=1042390864]
-offset_left = 514.0
-offset_top = 289.0
-offset_right = 583.0
-offset_bottom = 312.0
-size_flags_horizontal = 4
-text = "You Died"
+[node name="CanvasLayer" type="CanvasLayer" unique_id=513223950]
+visible = false
+script = ExtResource("1_vjdtf")
+
+[node name="Panel" type="Panel" parent="." unique_id=921039350]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="." unique_id=2083124649]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -38.0
+offset_top = -11.5
+offset_right = 38.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "YOU DIED"

@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 signal health_changed(health_value)
+signal player_died
 
 @onready var camera = $Camera3D
 @onready var anim_player = $AnimationPlayer
@@ -15,6 +16,8 @@ signal health_changed(health_value)
 
 var is_sliding: bool = false
 var slide_timer: float = 0.0
+#var is_dead: bool = false
+#var player_id: int 
 
 var health = 100
 var damage = 10
@@ -135,6 +138,9 @@ func receive_damage():
 	health -= damage
 	health_changed.emit(health)
 	if health <= 0:
-		get_tree().change_scene_to_file("res://scenes/lose.tscn")
+		player_died.emit()
+		set_physics_process(false)
+		visible = false
+		#get_tree().change_scene_to_file("res://scenes/lose.tscn")
 		#health = 3
 		#position = Vector3.ZERO
