@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://t2uyuire0yg1"]
 
-[ext_resource type="Script" uid="uid://bo48iw6x2at6s" path="res://scenes/lose.gd" id="1_vjdtf"]
+[ext_resource type="Script" uid="uid://bo48iw6x2at6s" path="res://Scripts/lose.gd" id="1_vjdtf"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=513223950]
 visible = false

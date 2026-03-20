@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://xcjrjq5cbn7y"]
 
-[ext_resource type="Script" uid="uid://byvoccpe1ihl7" path="res://scenes/Player.gd" id="1_2v3wm"]
+[ext_resource type="Script" uid="uid://byvoccpe1ihl7" path="res://Scripts/Player.gd" id="1_2v3wm"]
 [ext_resource type="PackedScene" uid="uid://cf1dcxwv6bvl3" path="res://models/Pistol.glb" id="2_4esil"]
 [ext_resource type="Texture2D" uid="uid://vwob30tkwej4" path="res://addons/kenney_particle_pack/star_06.png" id="3_27dhu"]
 
@@ -138,10 +138,6 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_2v3wm")
 enemy_raycast = NodePath("Camera3D/EnemyRayCast3D")
-walk_speed = null
-slide_speed = null
-slide_duration = null
-slide_friction = null
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1832600017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
