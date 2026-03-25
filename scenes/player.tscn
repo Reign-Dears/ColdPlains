@@ -133,11 +133,12 @@ material = SubResource("StandardMaterial3D_4smqo")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
-[node name="Player" type="CharacterBody3D" unique_id=820130408 node_paths=PackedStringArray("enemy_raycast")]
+[node name="Player" type="CharacterBody3D" unique_id=820130408 node_paths=PackedStringArray("enemy_raycast", "particle_raycast")]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_2v3wm")
 enemy_raycast = NodePath("Camera3D/EnemyRayCast3D")
+particle_raycast = NodePath("Camera3D/ParticleRayCast")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1832600017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -187,5 +188,9 @@ collision_mask = 2
 [node name="EnemyRayCast3D" type="RayCast3D" parent="Camera3D" unique_id=890706288]
 target_position = Vector3(0, 0, -50)
 collision_mask = 4
+
+[node name="ParticleRayCast" type="RayCast3D" parent="Camera3D" unique_id=1365912623]
+target_position = Vector3(0, 0, -50)
+collision_mask = 15
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

@@ -8,10 +8,13 @@ signal health_changed(health_value)
 @onready var raycast = $Camera3D/RayCast3D
 @onready var flashlight = $Camera3D/Hand/SpotLight3D
 @export var enemy_raycast : RayCast3D
+@export var particle_raycast : RayCast3D
 @export var walk_speed: float = 5.0
 @export var slide_speed: float = 20.0
 @export var slide_duration: float = 0.5
 @export var slide_friction: float = 0.95
+
+var hit_explosion_scene = preload("res://Shaders/hit_explosion.tscn")
 
 var is_sliding: bool = false
 var slide_timer: float = 0.0
@@ -58,7 +61,14 @@ func _unhandled_input(event):
 			var hit_player = raycast.get_collider()
 			hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
 		if enemy_raycast.is_colliding():
-			enemy_raycast.get_collider().damage_taken += 1 #replace with signals later
+			enemy_raycast.get_collider().damage_taken += damage #replace with signals later
+		if particle_raycast.is_colliding():
+			var hit_explosion = hit_explosion_scene.instantiate()
+			var pos = particle_raycast.get_collision_point()
+			var norm = particle_raycast.get_collision_normal()
+			hit_explosion.look_at_from_position(pos, norm + pos, Vector3(0, 0, 1))
+			get_parent().add_child(hit_explosion)
+
 
 func _physics_process(delta):
 	if not is_multiplayer_authority() or is_dead: 
