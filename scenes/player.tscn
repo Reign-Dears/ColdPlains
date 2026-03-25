@@ -202,5 +202,4 @@ offset_right = 4.0
 offset_bottom = 27.0
 value = 100.0
 
-
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
