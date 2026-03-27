@@ -14,6 +14,7 @@ signal health_changed(health_value)
 @export var slide_speed: float = 20.0
 @export var slide_duration: float = 0.5
 @export var slide_friction: float = 0.95
+@export var no_cooldown = false
 
 var hit_explosion_scene = preload("res://Shaders/hit_explosion.tscn")
 
@@ -57,9 +58,9 @@ func _unhandled_input(event):
 		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
-	if Input.is_action_just_pressed("shoot") \
+	if (Input.is_action_just_pressed("shoot") \
 			and anim_player.current_animation != "shoot" \
-			and not is_dead:
+			and not is_dead) or (Input.is_action_pressed("shoot") and no_cooldown):
 		play_shoot_effects.rpc()
 		if raycast.is_colliding():
 			var hit_player = raycast.get_collider()
