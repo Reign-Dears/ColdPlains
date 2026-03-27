@@ -9,6 +9,7 @@ extends Node
 #@onready var Player = $Player
 var tracked = false
 var player
+var isHosting
 
 
 const PORT = 9999
@@ -16,6 +17,7 @@ var enet_peer = ENetMultiplayerPeer.new()
 
 
 func _on_host_button_pressed():
+	isHosting = true
 	main_menu.hide()
 	hud.show()
 	
@@ -28,6 +30,7 @@ func _on_host_button_pressed():
 	
 	#upnp_setup()
 func _on_join_button_pressed():
+	isHosting = false
 	main_menu.hide()
 	hud.show()
 	
@@ -79,9 +82,10 @@ func add_player(peer_id):
 		player.health_changed.connect(update_health_bar)
 
 func remove_player(peer_id):
-	var player = get_node_or_null(str(peer_id))
-	if player:
-		player.queue_free()
+	if not isHosting:
+		var player = get_node_or_null(str(peer_id))
+		if player:
+			player.queue_free()
 
 func update_health_bar(health_value):
 	health_bar.value = health_value
