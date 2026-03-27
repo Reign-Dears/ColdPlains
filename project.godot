@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="ColdPlains"
-config/tags=PackedStringArray("multiplayer")
+config/tags=PackedStringArray("2026", "multiplayer")
 run/main_scene="res://scenes/testWorld.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="uid://dlim0ut2xa0na"
