@@ -48,6 +48,9 @@ var crouch_speed = 3
 var crouch_jump_velocity = 3
 const CROUCH_TRANSLATE = 0.7
 
+# Debug mode toggle
+var debug_mode = true
+
 func _enter_tree():
 	print(name)
 	set_multiplayer_authority(str(name).to_int())
@@ -60,6 +63,12 @@ func _ready():
 	camera.current = true
 	
 	$CanvasLayer.visible = true
+	
+	if debug_mode:
+		print("=== PLAYER DEBUG MODE ENABLED ===")
+		print("Initial SPEED: ", SPEED)
+		print("Initial gravity: ", gravity)
+		print("Jump velocity: ", JUMP_VELOCITY)
 
 func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -105,7 +114,6 @@ func _unhandled_input(event):
 	elif Input.is_action_just_released("shoot"):
 		is_shooting = false
 
-
 	
 func _physics_process(delta):
 	if not is_multiplayer_authority() or is_dead: 
@@ -113,36 +121,73 @@ func _physics_process(delta):
 	
 	_handle_crouch(delta)
 	
+	# DEBUG: Print input
+	var input_dir = Input.get_vector("left", "right", "up", "down")
+	if debug_mode and input_dir != Vector2.ZERO:
+		print("--- INPUT ---")
+		print("Input direction: ", input_dir)
+	
+	# DEBUG: Print on_floor status
+	if debug_mode and (Input.is_action_pressed("left") or Input.is_action_pressed("right") or Input.is_action_pressed("up") or Input.is_action_pressed("down")):
+		print("On floor: ", is_on_floor())
+	
+	# GRAVITY
 	if not is_on_floor():
 		velocity.y -= gravity * delta
+		if debug_mode:
+			print("Falling - Velocity Y: ", velocity.y)
+	
+	# JUMP
 	if Input.is_action_pressed("ui_accept") and is_on_floor():
 		velocity += JUMP_VELOCITY * get_floor_normal()
+		if debug_mode:
+			print("JUMP! Velocity Y after jump: ", velocity.y)
 		
 	if Input.is_action_just_pressed("toggle_flashlight"):
 		flashlight.visible = not flashlight.visible
 
+	# SLIDE
 	if Input.is_action_just_pressed("slide") and is_on_floor():
-		var input_dir = Input.get_vector("left", "right", "up", "down")
-		var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+		var slide_input_dir = Input.get_vector("left", "right", "up", "down")
+		var direction = (transform.basis * Vector3(slide_input_dir.x, 0, slide_input_dir.y)).normalized()
 		if direction != Vector3.ZERO and not is_sliding:
+			if debug_mode:
+				print("--- SLIDE START ---")
+				print("Slide direction: ", direction)
+				print("Slide speed: ", slide_speed)
 			start_slide(direction)
 
+	# MOVEMENT LOGIC
 	if is_sliding:
 		slide_timer += delta
 		velocity.x *= slide_friction
 		velocity.z *= slide_friction
+		if debug_mode:
+			print("SLIDING - Timer: ", slide_timer, " / ", slide_duration)
+			print("Slide velocity: X=", velocity.x, " Z=", velocity.z)
 		if slide_timer >= slide_duration:
 			is_sliding = false
+			if debug_mode:
+				print("--- SLIDE END ---")
 	else:
-		var input_dir = Input.get_vector("left", "right", "up", "down")
-		var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+		var move_input_dir = Input.get_vector("left", "right", "up", "down")
+		var direction = (transform.basis * Vector3(move_input_dir.x, 0, move_input_dir.y)).normalized()
+		
 		if direction:
 			velocity.x = direction.x * SPEED
 			velocity.z = direction.z * SPEED
+			if debug_mode:
+				print("--- MOVING ---")
+				print("Direction: ", direction)
+				print("SPEED: ", SPEED)
+				print("Velocity X: ", velocity.x, " Z: ", velocity.z)
 		else:
 			var damping_value = 10
 			velocity.x = move_toward(velocity.x, 0, SPEED / damping_value * abs(velocity.normalized().x))
 			velocity.z = move_toward(velocity.z, 0, SPEED / damping_value * abs(velocity.normalized().z))
+			if debug_mode and (velocity.x != 0 or velocity.z != 0):
+				print("--- SLOWING DOWN (DAMPING) ---")
+				print("Damped velocity X: ", velocity.x, " Z: ", velocity.z)
 
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down")
 	
@@ -173,6 +218,11 @@ func _physics_process(delta):
 	if is_shooting and current_weapon == rifle:
 		perform_shooting_logic()
 
+	# DEBUG: Final velocity before move_and_slide
+	if debug_mode:
+		print("Final velocity: X=", velocity.x, " Y=", velocity.y, " Z=", velocity.z)
+		print("Player position: ", global_position)
+		print("---")
 
 	move_and_slide()
 
@@ -260,6 +310,9 @@ func _handle_crouch(delta) -> void:
 		JUMP_VELOCITY = 10
 	
 	is_crouched = Input.is_action_pressed("crouch")
+	if debug_mode and is_crouched:
+		print("CROUCH: SPEED=", SPEED, " JUMP_VELOCITY=", JUMP_VELOCITY)
+	
 	camera.position = Vector3(0,(CROUCH_TRANSLATE if is_crouched else 1.513),0)
 	$CollisionShape3D.shape.height = stand_height - CROUCH_TRANSLATE if is_crouched else stand_height
 	$CollisionShape3D.position.y = $CollisionShape3D.shape.height / 2
