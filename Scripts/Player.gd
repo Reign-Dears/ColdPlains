@@ -50,6 +50,8 @@ const CROUCH_TRANSLATE = 0.7
 
 # Debug mode toggle
 var debug_mode = true
+var debug_file: FileAccess
+var frame_count = 0
 
 func _enter_tree():
 	print(name)
@@ -65,6 +67,11 @@ func _ready():
 	$CanvasLayer.visible = true
 	
 	if debug_mode:
+		debug_file = FileAccess.open("user://player_movement_debug.txt", FileAccess.WRITE)
+		if debug_file:
+			debug_file.store_line("=== PLAYER MOVEMENT DEBUG LOG ===")
+			debug_file.store_line("Timestamp: " + str(Time.get_ticks_msec()))
+			debug_file.store_line("")
 		print("=== PLAYER DEBUG MODE ENABLED ===")
 		print("Initial SPEED: ", SPEED)
 		print("Initial gravity: ", gravity)
@@ -72,6 +79,8 @@ func _ready():
 
 func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if debug_file and debug_mode:
+		debug_file = null
 
 func _unhandled_input(event):
 	if not is_multiplayer_authority() or is_dead:
@@ -118,6 +127,8 @@ func _unhandled_input(event):
 func _physics_process(delta):
 	if not is_multiplayer_authority() or is_dead: 
 		return
+	
+	frame_count += 1
 	
 	_handle_crouch(delta)
 	
@@ -224,7 +235,34 @@ func _physics_process(delta):
 		print("Player position: ", global_position)
 		print("---")
 
+	# DEBUG: Write to file every 10 frames
+	if debug_mode and frame_count % 10 == 0 and debug_file:
+		write_debug_data(delta, input_dir)
+
 	move_and_slide()
+
+func write_debug_data(delta: float, input_dir: Vector2):
+	if not debug_file:
+		return
+	
+	# DATA 1: Position
+	var pos_x = snapped(global_position.x, 0.01)
+	var pos_y = snapped(global_position.y, 0.01)
+	var pos_z = snapped(global_position.z, 0.01)
+	
+	# DATA 2: Velocity
+	var vel_x = snapped(velocity.x, 0.01)
+	var vel_y = snapped(velocity.y, 0.01)
+	var vel_z = snapped(velocity.z, 0.01)
+	
+	# DATA 3: Current Speed
+	var current_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.01)
+	
+	debug_file.store_line("[FRAME " + str(frame_count) + "]")
+	debug_file.store_line("POSITION: X=" + str(pos_x) + " Y=" + str(pos_y) + " Z=" + str(pos_z))
+	debug_file.store_line("VELOCITY: X=" + str(vel_x) + " Y=" + str(vel_y) + " Z=" + str(vel_z))
+	debug_file.store_line("SPEED: " + str(current_speed) + " units/sec")
+	debug_file.store_line("-" * 40)
 
 func perform_shooting_logic():
 	if raycast.is_colliding():
