@@ -2,10 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://bvi5m4a3pit27" path="res://Models/Building/floor_straight.tscn" id="1_a202f"]
 [ext_resource type="PackedScene" uid="uid://dnyeekati1o0i" path="res://Models/Building/door_wide.tscn" id="1_jka67"]
-[ext_resource type="PackedScene" uid="uid://cvp6g74mrn278" path="res://Models/Building/panel_corner.tscn" id="3_i5arm"]
+[ext_resource type="PackedScene" path="res://Models/Building/panel_corner.tscn" id="3_i5arm"]
 [ext_resource type="PackedScene" uid="uid://cw7v6o5kvlbhm" path="res://Models/Building/floor_end.tscn" id="4_wc5p8"]
 [ext_resource type="PackedScene" uid="uid://dsj30h3twauof" path="res://Models/Building/stair_double.tscn" id="5_jsk3o"]
 [ext_resource type="PackedScene" uid="uid://bva5cwvb2j8e8" path="res://Models/Building/stair_corner.tscn" id="6_lmk64"]
+[ext_resource type="PackedScene" uid="uid://boawlph2v8nlw" path="res://Models/Building/stair_ramp.tscn" id="7_xywud"]
 
 [node name="librarySource" type="Node3D" unique_id=1856320612]
 
@@ -20,3 +21,6 @@
 [node name="stairDouble" parent="." unique_id=1609747084 instance=ExtResource("5_jsk3o")]
 
 [node name="stairCorner" parent="." unique_id=212643518 instance=ExtResource("6_lmk64")]
+
+[node name="stairRamp" parent="." unique_id=1117069453 instance=ExtResource("7_xywud")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
